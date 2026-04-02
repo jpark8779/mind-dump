@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"/>
+<meta name="theme-color" content="#0c1324"/>
+<title>Mind Dump v4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════ MIND DUMP v4 — Celestial Archive ═══════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+input,textarea{font-family:inherit}textarea{resize:none}
+:root{
+  --bg:#0c1324;--surface-low:#151b2d;--surface:#0c1324;
+  --surface-high:#23293c;--surface-bright:#33394c;--surface-variant:#2e3447;
+  --primary:#f9bd22;--on-primary:#402d00;
+  --on-surface:#dce1fb;--on-surface-dim:#909097;
+  --outline:rgba(255,255,255,0.08);
+  --top-bar-h:48px;--bottom-nav-h:64px;
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--on-surface);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.logo-text{font-family:'Manrope',system-ui,sans-serif}
+
+@keyframes float-a{0%,100%{transform:translate(0,0)}25%{transform:translate(3px,-4px)}50%{transform:translate(-2px,3px)}75%{transform:translate(4px,1px)}}
+@keyframes float-b{0%,100%{transform:translate(0,0)}25%{transform:translate(-4px,2px)}50%{transform:translate(3px,-3px)}75%{transform:translate(-2px,4px)}}
+@keyframes float-c{0%,100%{transform:translate(0,0)}25%{transform:translate(2px,4px)}50%{transform:translate(-3px,-2px)}75%{transform:translate(1px,3px)}}
+@keyframes float-d{0%,100%{transform:translate(0,0)}25%{transform:translate(-3px,-4px)}50%{transform:translate(4px,2px)}75%{transform:translate(-1px,-3px)}}
+@keyframes float-e{0%,100%{transform:translate(0,0)}25%{transform:translate(4px,3px)}50%{transform:translate(-2px,-4px)}75%{transform:translate(3px,2px)}}
+@keyframes float-f{0%,100%{transform:translate(0,0)}25%{transform:translate(-2px,3px)}50%{transform:translate(4px,-1px)}75%{transform:translate(-3px,-2px)}}
+@keyframes twinkle{0%,100%{opacity:0.3}50%{opacity:1}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes mirrorFadeIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes insightPop{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* AUTH */
+#auth-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 60%,#1a2340 0%,var(--bg) 70%);z-index:1000}
+.auth-card{width:min(380px,92vw);background:rgba(35,41,60,0.7);backdrop-filter:blur(20px);border-radius:24px;border:1px solid var(--outline);padding:36px 32px;display:flex;flex-direction:column;align-items:center;gap:20px;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.auth-logo{display:flex;align-items:center;gap:10px}
+.logo-text{font-size:22px;font-weight:700}
+.auth-tagline{font-size:13px;color:var(--on-surface-dim);text-align:center}
+#auth-tabs{display:flex;gap:4px;background:rgba(255,255,255,0.06);border-radius:12px;padding:4px;width:100%}
+.auth-tab{flex:1;padding:8px;border-radius:8px;font-size:13px;color:var(--on-surface-dim);transition:all .2s ease}
+.auth-tab.active{background:var(--surface-bright);color:var(--on-surface);font-weight:600}
+#auth-form{display:flex;flex-direction:column;gap:12px;width:100%}
+.auth-input{width:100%;padding:12px 14px;background:rgba(255,255,255,0.06);border:1px solid var(--outline);border-radius:12px;color:var(--on-surface);font-size:16px;transition:border-color .2s}
+.auth-input:focus{outline:none;border-color:var(--primary)}
+.auth-btn{width:100%;padding:13px;background:var(--primary);color:var(--on-primary);border-radius:12px;font-size:15px;font-weight:700;transition:opacity .2s,transform .1s}
+.auth-btn:hover{opacity:.9}.auth-btn:active{transform:scale(.98)}
+.auth-error{font-size:12px;color:#f87171;min-height:16px;text-align:center}
+.auth-guest-btn{font-size:12px;color:var(--on-surface-dim);text-decoration:underline}
+
+/* APP LAYOUT */
+#app{display:flex;flex-direction:column;height:100dvh;height:100vh;overflow:hidden;position:relative}
+#top-bar{flex-shrink:0;height:var(--top-bar-h);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:linear-gradient(to bottom,rgba(12,19,36,.95) 0%,transparent 100%);position:relative;z-index:10}
+#stats-display{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--on-surface-dim)}
+.stat-sep{opacity:.4}
+.icon-btn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--on-surface-dim);transition:background .2s}
+.icon-btn:hover{background:rgba(255,255,255,0.08)}
+#canvas-wrap{flex:1;position:relative;overflow:hidden;background:var(--bg)}
+#star-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#main-svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+#emotion-tint{position:absolute;inset:0;pointer-events:none;transition:background 3s ease}
+#empty-state{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;pointer-events:none;color:var(--on-surface-dim);text-align:center}
+#empty-state.hidden{display:none}
+.empty-icon{font-size:32px;color:rgba(249,189,34,.3);margin-bottom:8px}
+.empty-sub{font-size:12px;opacity:.6;line-height:1.6}
+#snapshot-slider-bar{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;background:rgba(35,41,60,.7);backdrop-filter:blur(12px);border:1px solid var(--outline);border-radius:99px;padding:8px 16px;min-width:240px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.snap-label{font-size:11px;color:var(--on-surface-dim);white-space:nowrap}
+#snap-slider{flex:1;accent-color:var(--primary)}
+#snap-current-btn{font-size:11px;color:var(--primary);font-weight:600;white-space:nowrap}
+#zoom-ctrl{position:absolute;bottom:70px;right:12px;display:flex;flex-direction:column;gap:4px}
+.zoom-btn{width:36px;height:36px;background:rgba(35,41,60,.8);backdrop-filter:blur(8px);border:1px solid var(--outline);border-radius:10px;color:var(--on-surface);font-size:18px;font-weight:300;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.zoom-btn:hover{background:var(--surface-high)}.zoom-fit{font-size:14px}
+#insight-overlay{position:absolute;top:12px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;z-index:20;pointer-events:none;width:min(360px,92vw)}
+.insight-card{background:rgba(35,41,60,.85);backdrop-filter:blur(12px);border:1px solid var(--outline);border-radius:16px;padding:12px 16px;animation:insightPop .4s ease-out;pointer-events:auto;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.insight-card .i-type{font-size:10px;color:var(--primary);font-weight:700;letter-spacing:.05em;margin-bottom:4px;text-transform:uppercase}
+.insight-card .i-text{font-size:13px;color:var(--on-surface);line-height:1.5}
+
+/* BOTTOM SHEET */
+#bottom-sheet{position:fixed;bottom:calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px));left:0;right:0;background:rgba(46,52,71,.6);backdrop-filter:blur(20px);border-radius:24px 24px 0 0;border-top:1px solid var(--outline);transform:translateY(100%);transition:transform .4s cubic-bezier(.32,.72,0,1);z-index:30;max-height:70vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#bottom-sheet.open{transform:translateY(0)}
+#sheet-handle{width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.2);margin:10px auto 0}
+#sheet-content{padding:16px 20px 24px}
+.sheet-breadcrumb{font-size:11px;color:var(--on-surface-dim);margin-bottom:12px}
+.sheet-title{font-size:16px;font-weight:600;margin-bottom:8px;color:var(--on-surface)}
+.sheet-section{margin-top:16px}
+.sheet-section-label{font-size:11px;color:var(--on-surface-dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+.sheet-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.sheet-btn{padding:7px 14px;border-radius:10px;background:rgba(255,255,255,.08);color:var(--on-surface);font-size:12px;font-weight:500;transition:background .2s}
+.sheet-btn:hover{background:rgba(255,255,255,.14)}.sheet-btn.danger{color:#f87171}
+.emotion-chip{display:inline-flex;align-items:center;gap:4px;border-radius:99px;padding:4px 10px;font-size:12px}
+.bar-wrap{display:flex;align-items:center;gap:8px;margin-top:4px}
+.bar-label{font-size:11px;color:var(--on-surface-dim);width:28px}
+.bar-track{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.1)}
+.bar-fill{height:100%;border-radius:2px;background:var(--primary);transition:width .4s}
+.thought-list-item{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--outline);font-size:13px}
+.thought-list-item:last-child{border-bottom:none}
+.thought-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.thought-edit-area{width:100%;padding:8px;background:rgba(255,255,255,.06);border:1px solid var(--outline);border-radius:8px;color:var(--on-surface);font-size:16px;min-height:60px;margin-top:8px}
+.thought-edit-area:focus{outline:none;border-color:var(--primary)}
+
+/* BOTTOM NAV */
+#bottom-nav{flex-shrink:0;height:calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px));padding-bottom:env(safe-area-inset-bottom, 0px);display:flex;align-items:stretch;background:rgba(21,27,45,.95);backdrop-filter:blur(12px);border-top:1px solid var(--outline);z-index:40;position:relative}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--on-surface-dim);font-size:10px;transition:color .2s}
+.nav-btn.active{color:var(--primary)}
+.fab{width:52px;height:52px;border-radius:50%;background:var(--primary);color:var(--on-primary);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(249,189,34,.4);transition:transform .15s,box-shadow .15s;margin-bottom:2px}
+.fab:hover{transform:scale(1.05)}.fab:active{transform:scale(.96)}
+
+/* SESSION OVERLAY */
+#session-overlay{position:fixed;inset:0;z-index:100;background:rgba(8,13,26,.96);backdrop-filter:blur(16px);display:flex;align-items:flex-end;animation:fadeIn .3s ease}
+#session-panel{width:100%;max-height:90dvh;background:rgba(46,52,71,.5);backdrop-filter:blur(24px);border-radius:28px 28px 0 0;border-top:1px solid var(--outline);padding:24px 20px calc(36px + env(safe-area-inset-bottom, 0px));overflow-y:auto;animation:slideUp .4s cubic-bezier(.32,.72,0,1)}
+#session-header{display:flex;align-items:center;gap:20px;margin-bottom:20px}
+#session-timer-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:48px;height:48px;flex-shrink:0}
+#session-timer{position:absolute;font-size:10px;font-weight:700;color:var(--primary)}
+#timer-mode-btns{display:flex;gap:6px}
+.timer-mode-btn{padding:6px 14px;border-radius:99px;font-size:12px;font-weight:600;background:rgba(255,255,255,.08);color:var(--on-surface-dim);transition:all .2s}
+.timer-mode-btn.active{background:rgba(249,189,34,.15);color:var(--primary)}
+#session-hint{min-height:18px;font-size:13px;color:var(--on-surface-dim);font-style:italic;margin-bottom:8px;animation:fadeIn .5s ease}
+.mind-input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.15);color:var(--on-surface);font-size:16px;line-height:1.6;padding:8px 0;transition:border-bottom-color .2s}
+.mind-input:focus{border-bottom-color:var(--primary);outline:none}
+.mind-input::placeholder{color:rgba(220,225,251,.3)}
+#session-footer{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.session-cancel{color:var(--on-surface-dim);font-size:14px}
+.session-done{background:var(--primary);color:var(--on-primary);padding:10px 22px;border-radius:14px;font-size:14px;font-weight:700;box-shadow:0 0 16px rgba(249,189,34,.3)}
+.pending-label{font-size:11px;color:var(--on-surface-dim);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.05em}
+.pending-capture-item{font-size:13px;color:var(--on-surface-dim);padding:4px 0}
+
+/* MIRROR */
+#mirror-overlay{position:fixed;inset:0;z-index:110;display:flex;align-items:center;justify-content:center;background:rgba(8,13,26,.92);backdrop-filter:blur(16px);padding:32px}
+#mirror-content{max-width:460px;text-align:center;animation:mirrorFadeIn .6s ease}
+.mirror-icon{font-size:28px;color:rgba(249,189,34,.5);margin-bottom:20px}
+#mirror-text{font-size:16px;line-height:1.8;color:var(--on-surface);font-style:italic}
+
+/* LOADING */
+#loading-overlay{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;background:rgba(8,13,26,.7);backdrop-filter:blur(8px)}
+.loading-inner{text-align:center;color:var(--on-surface-dim)}
+.loading-spinner{width:40px;height:40px;border-radius:50%;border:3px solid rgba(255,255,255,.1);border-top-color:var(--primary);animation:spin .8s linear infinite;margin:0 auto 12px}
+
+/* MODAL */
+#modal-overlay{position:fixed;inset:0;z-index:130;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);padding:20px}
+#modal-box{background:var(--surface-bright);border-radius:20px;padding:24px;max-width:320px;width:100%;border:1px solid var(--outline);box-shadow:0 20px 40px rgba(0,0,0,.4);animation:fadeIn .2s ease}
+#modal-text{font-size:14px;color:var(--on-surface);margin-bottom:20px;line-height:1.6}
+#modal-buttons{display:flex;gap:8px;justify-content:flex-end}
+.modal-btn{padding:8px 18px;border-radius:10px;font-size:13px;font-weight:600;transition:opacity .2s}
+.modal-btn:hover{opacity:.85}
+.modal-btn.primary{background:var(--primary);color:var(--on-primary)}
+.modal-btn.secondary{background:rgba(255,255,255,.1);color:var(--on-surface)}
+.modal-btn.danger{background:rgba(248,113,113,.2);color:#f87171}
+.modal-select{width:100%;margin-bottom:16px;padding:10px;background:rgba(255,255,255,.08);border:1px solid var(--outline);border-radius:10px;color:var(--on-surface);font-size:16px}
+
+/* TOAST */
+#error-toast{position:fixed;bottom:calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px) + 16px);left:50%;transform:translateX(-50%);background:rgba(35,41,60,.95);border:1px solid var(--outline);color:var(--on-surface);padding:10px 20px;border-radius:12px;font-size:13px;white-space:nowrap;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:toastIn .3s ease}
+
+/* QUICK CAPTURE */
+#quick-capture-btn{position:fixed;right:16px;bottom:calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px) + 70px);width:40px;height:40px;border-radius:50%;background:rgba(35,41,60,.8);backdrop-filter:blur(8px);border:1px solid var(--outline);color:var(--on-surface-dim);display:flex;align-items:center;justify-content:center;z-index:25;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+#quick-capture-popup{position:fixed;right:16px;bottom:calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px) + 116px);width:min(280px,80vw);background:rgba(35,41,60,.95);backdrop-filter:blur(16px);border:1px solid var(--outline);border-radius:16px;padding:14px;z-index:25;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:fadeIn .2s ease}
+#quick-capture-save{margin-top:8px;float:right;background:var(--primary);color:var(--on-primary);padding:6px 16px;border-radius:8px;font-size:12px;font-weight:700}
+
+/* MENU */
+#menu-dropdown{position:fixed;top:52px;right:12px;background:var(--surface-bright);border:1px solid var(--outline);border-radius:14px;overflow:hidden;z-index:50;box-shadow:0 12px 32px rgba(0,0,0,.4);min-width:160px;animation:fadeIn .15s ease}
+.menu-item{display:block;width:100%;text-align:left;padding:12px 16px;font-size:13px;color:var(--on-surface);transition:background .15s}
+.menu-item:hover{background:rgba(255,255,255,.07)}
+
+/* INSIGHTS PANEL */
+#insights-panel{position:fixed;inset:var(--top-bar-h) 0 calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px)) 0;background:var(--bg);overflow-y:auto;padding:20px;z-index:20}
+#insights-list{display:flex;flex-direction:column;gap:12px}
+.insight-full-card{background:var(--surface-low);border-radius:16px;padding:16px;border:1px solid var(--outline)}
+.insight-full-type{font-size:10px;color:var(--primary);font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.insight-full-text{font-size:14px;color:var(--on-surface);line-height:1.6}
+.no-insights{text-align:center;color:var(--on-surface-dim);padding:48px 0}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <svg width="36" height="36" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="18" stroke="#f9bd22" stroke-width="1.5" opacity=".6"/>
+        <circle cx="20" cy="20" r="3" fill="#f9bd22"/>
+        <circle cx="20" cy="8" r="2" fill="#60a5fa" opacity=".8"/>
+        <circle cx="30" cy="26" r="1.5" fill="#f472b6" opacity=".8"/>
+        <circle cx="10" cy="26" r="1.5" fill="#34d399" opacity=".8"/>
+        <line x1="20" y1="20" x2="20" y2="9" stroke="#60a5fa" stroke-width=".8" opacity=".4"/>
+        <line x1="20" y1="20" x2="29" y2="26" stroke="#f472b6" stroke-width=".8" opacity=".4"/>
+        <line x1="20" y1="20" x2="11" y2="26" stroke="#34d399" stroke-width=".8" opacity=".4"/>
+      </svg>
+      <span class="logo-text">Mind Dump</span>
+    </div>
+    <p class="auth-tagline">생각을 쏟아내면, 우주가 정리해 줘요</p>
+    <div id="auth-tabs">
+      <button class="auth-tab active" data-tab="signin">로그인</button>
+      <button class="auth-tab" data-tab="signup">회원가입</button>
+    </div>
+    <form id="auth-form">
+      <input type="email" id="auth-email" class="auth-input" placeholder="이메일" autocomplete="email" required/>
+      <input type="password" id="auth-password" class="auth-input" placeholder="비밀번호" autocomplete="current-password" required/>
+      <button type="submit" id="auth-submit" class="auth-btn">로그인</button>
+    </form>
+    <p id="auth-error" class="auth-error"></p>
+    <button id="auth-guest" class="auth-guest-btn">게스트로 시작 (로컬 저장)</button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" style="display:none">
+  <div id="top-bar">
+    <div id="stats-display">
+      <span id="stat-thoughts">생각 0</span><span class="stat-sep">·</span>
+      <span id="stat-categories">분류 0</span><span class="stat-sep">·</span>
+      <span id="stat-cats">카테고리 0</span>
+    </div>
+    <button id="menu-btn" class="icon-btn">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+        <circle cx="10" cy="4" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="10" cy="16" r="1.5"/>
+      </svg>
+    </button>
+  </div>
+  <div id="canvas-wrap">
+    <svg id="star-svg" aria-hidden="true"></svg>
+    <svg id="main-svg" touch-action="none">
+      <defs>
+        <marker id="arrow-causes" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#fb923c"/></marker>
+        <marker id="arrow-resolves" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#34d399"/></marker>
+        <marker id="arrow-blocks" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#94a3b8"/></marker>
+        <filter id="textbg" x="-20%" y="-30%" width="140%" height="160%">
+          <feFlood flood-color="#0c1324" flood-opacity="0.7" result="bg"/>
+          <feMerge><feMergeNode in="bg"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <g id="world"></g>
+    </svg>
+    <div id="empty-state">
+      <div class="empty-icon">✦</div>
+      <p>생각을 시작해보세요</p>
+      <p class="empty-sub">아래 버튼을 눌러 마음을 쏟아내면<br>AI가 지도로 만들어드려요</p>
+    </div>
+    <div id="snapshot-slider-bar" style="display:none">
+      <span id="snap-label" class="snap-label"></span>
+      <input type="range" id="snap-slider" min="0" max="0" value="0"/>
+      <button id="snap-current-btn">현재로</button>
+    </div>
+    <div id="zoom-ctrl">
+      <button id="zoom-in-btn" class="zoom-btn">+</button>
+      <button id="zoom-out-btn" class="zoom-btn">−</button>
+      <button id="zoom-fit-btn" class="zoom-btn zoom-fit">⊡</button>
+    </div>
+    <div id="insight-overlay" style="display:none"></div>
+    <div id="emotion-tint"></div>
+  </div>
+  <div id="bottom-sheet">
+    <div id="sheet-handle"></div>
+    <div id="sheet-content"></div>
+  </div>
+  <nav id="bottom-nav">
+    <button class="nav-btn active" data-tab="map">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="9"/><circle cx="11" cy="11" r="3"/>
+        <line x1="11" y1="2" x2="11" y2="8"/><line x1="11" y1="14" x2="11" y2="20"/>
+        <line x1="2" y1="11" x2="8" y2="11"/><line x1="14" y1="11" x2="20" y2="11"/>
+      </svg>
+      <span>맵</span>
+    </button>
+    <button class="nav-btn" data-tab="insights">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="9"/><path d="M11 7v4l2 2"/>
+      </svg>
+      <span>인사이트</span>
+    </button>
+    <button class="nav-btn session-nav-btn" data-tab="session">
+      <div class="fab">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5v14M5 12h14"/></svg>
+      </div>
+    </button>
+  </nav>
+</div>
+
+<!-- OVERLAYS -->
+<div id="session-overlay" style="display:none">
+  <div id="session-panel">
+    <div id="session-header">
+      <div id="session-timer-wrap">
+        <svg width="48" height="48" viewBox="0 0 48 48" id="timer-ring-svg">
+          <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="3"/>
+          <circle cx="24" cy="24" r="20" fill="none" stroke="#f9bd22" stroke-width="3" stroke-dasharray="125.66" stroke-dashoffset="0" stroke-linecap="round" id="timer-ring" transform="rotate(-90 24 24)"/>
+        </svg>
+        <span id="session-timer">7:00</span>
+      </div>
+      <div id="timer-mode-btns">
+        <button class="timer-mode-btn active" data-min="7">7분</button>
+        <button class="timer-mode-btn" data-min="10">10분</button>
+        <button class="timer-mode-btn" data-min="0">자유</button>
+      </div>
+    </div>
+    <div id="session-hint"></div>
+    <textarea id="session-input" class="mind-input" placeholder="지금 마음속에 있는 것들을 자유롭게 쏟아내세요.&#10;줄바꿈이나 쉼표로 구분해요." rows="8"></textarea>
+    <div id="session-footer">
+      <button id="session-cancel-btn" class="session-cancel">취소</button>
+      <button id="session-done-btn" class="session-done">다 나왔다 →</button>
+    </div>
+    <div id="pending-captures-wrap" style="display:none">
+      <p class="pending-label">즉석 메모 (자동 포함됨)</p>
+      <div id="pending-list"></div>
+    </div>
+  </div>
+</div>
+
+<div id="mirror-overlay" style="display:none">
+  <div id="mirror-content">
+    <div class="mirror-icon">◈</div>
+    <p id="mirror-text"></p>
+  </div>
+</div>
+
+<div id="loading-overlay" style="display:none">
+  <div class="loading-inner">
+    <div class="loading-spinner"></div>
+    <p>생각을 정리하는 중...</p>
+  </div>
+</div>
+
+<div id="modal-overlay" style="display:none">
+  <div id="modal-box">
+    <div id="modal-text"></div>
+    <div id="modal-buttons"></div>
+  </div>
+</div>
+
+<div id="error-toast" style="display:none"></div>
+
+<button id="quick-capture-btn">
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M10 3v14M3 10h14"/></svg>
+</button>
+<div id="quick-capture-popup" style="display:none">
+  <textarea id="quick-capture-input" class="mind-input" placeholder="방금 떠오른 것..." rows="3"></textarea>
+  <button id="quick-capture-save">저장</button>
+</div>
+
+<div id="menu-dropdown" style="display:none">
+  <button class="menu-item" id="menu-apikey">🔑 API 키 설정</button>
+  <button class="menu-item" id="menu-export">내보내기 (JSON)</button>
+  <button class="menu-item" id="menu-import">가져오기</button>
+  <button class="menu-item" id="menu-reset">초기화</button>
+  <button class="menu-item" id="menu-reanalyze">전체 재분석</button>
+  <button class="menu-item" id="menu-signout">로그아웃</button>
+  <input type="file" id="import-file-input" accept=".json" style="display:none"/>
+</div>
+
+<!-- API Key Modal -->
+<div id="apikey-overlay" style="display:none;position:fixed;inset:0;z-index:150;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);padding:20px">
+  <div style="background:#33394c;border-radius:20px;padding:28px;max-width:360px;width:100%;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 40px rgba(0,0,0,.4)">
+    <div style="font-family:Manrope,sans-serif;font-size:16px;font-weight:700;margin-bottom:6px">🔑 Anthropic API 키</div>
+    <div style="font-size:12px;color:#909097;margin-bottom:16px;line-height:1.6">로컬 테스트용. 키는 이 기기의 브라우저에만 저장되며 외부로 전송되지 않아요.<br><a href="https://console.anthropic.com/keys" target="_blank" style="color:#f9bd22">console.anthropic.com</a>에서 발급 가능합니다.</div>
+    <input type="password" id="apikey-input" placeholder="sk-ant-api03-..." style="width:100%;padding:12px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px;color:#dce1fb;font-size:13px;font-family:monospace;margin-bottom:12px"/>
+    <div id="apikey-status" style="font-size:11px;color:#34d399;min-height:14px;margin-bottom:12px"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button id="apikey-cancel" style="padding:8px 18px;border-radius:10px;background:rgba(255,255,255,.1);color:#dce1fb;font-size:13px;font-weight:600">취소</button>
+      <button id="apikey-save" style="padding:8px 18px;border-radius:10px;background:#f9bd22;color:#402d00;font-size:13px;font-weight:700">저장</button>
+    </div>
+  </div>
+</div>
+
+<div id="insights-panel" style="display:none">
+  <div id="insights-list"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// MIND DUMP v4 — FULL APPLICATION
+// 로컬 테스트: API 키는 앱 안 ⚙️ 설정에서 입력하면 됩니다.
+// 배포 시: SUPABASE_URL, SUPABASE_ANON, API_ENDPOINT 설정
+// ═══════════════════════════════════════════════════════
+const CONFIG = {
+  SUPABASE_URL:  '',
+  SUPABASE_ANON: '',
+  API_ENDPOINT:  ''   // Cloudflare Worker URL. 비워두면 로컬 직접 호출 모드
+};
+const ANTHROPIC_DIRECT = 'https://api.anthropic.com/v1/messages';
+function getApiKey(){return localStorage.getItem('md-api-key')||''}
+
+// ════════════════ CONSTANTS ═══════════════════════════
+const COLORS = [
+  {main:'#60a5fa',glow:'rgba(96,165,250,0.2)',text:'#93c5fd',dim:'rgba(96,165,250,0.08)'},
+  {main:'#f97316',glow:'rgba(249,115,22,0.2)',text:'#fdba74',dim:'rgba(249,115,22,0.08)'},
+  {main:'#34d399',glow:'rgba(52,211,153,0.2)',text:'#6ee7b7',dim:'rgba(52,211,153,0.08)'},
+  {main:'#f472b6',glow:'rgba(244,114,182,0.2)',text:'#f9a8d4',dim:'rgba(244,114,182,0.08)'},
+  {main:'#a78bfa',glow:'rgba(167,139,250,0.2)',text:'#c4b5fd',dim:'rgba(167,139,250,0.08)'},
+  {main:'#fbbf24',glow:'rgba(251,191,36,0.2)',text:'#fde68a',dim:'rgba(251,191,36,0.08)'},
+  {main:'#2dd4bf',glow:'rgba(45,212,191,0.2)',text:'#99f6e4',dim:'rgba(45,212,191,0.08)'},
+  {main:'#fb7185',glow:'rgba(251,113,133,0.2)',text:'#fda4af',dim:'rgba(251,113,133,0.08)'}
+];
+const EMOTION = {
+  anxiety:     {color:'#f87171',label:'불안',glyph:'😟'},
+  frustration: {color:'#ef4444',label:'짜증',glyph:'😤'},
+  anticipation:{color:'#fb923c',label:'기대',glyph:'✨'},
+  conflict:    {color:'#c084fc',label:'갈등',glyph:'⚡'},
+  relief:      {color:'#34d399',label:'안도',glyph:'😮‍💨'},
+  pride:       {color:'#fbbf24',label:'뿌듯',glyph:'🌟'},
+  sadness:     {color:'#60a5fa',label:'서글픔',glyph:'🌧️'},
+  neutral:     {color:'#94a3b8',label:'중립',glyph:'💭'}
+};
+const REL_TYPES = {
+  causes:   {color:'#fb923c',dash:'none',width:2.5,label:'원인',arrow:true,marker:'arrow-causes'},
+  conflicts:{color:'#f87171',dash:'8 5',width:2.5,label:'갈등',arrow:false,marker:''},
+  resolves: {color:'#34d399',dash:'none',width:2.5,label:'해소',arrow:true,marker:'arrow-resolves'},
+  amplifies:{color:'#fbbf24',dash:'6 4',width:2.5,label:'심화',arrow:false,marker:''},
+  blocks:   {color:'#94a3b8',dash:'10 4 2 4',width:2.5,label:'방해',arrow:true,marker:'arrow-blocks'},
+  connects: {color:'#a78bfa',dash:'5 6',width:2.5,label:'연결',arrow:false,marker:''}
+};
+const INSIGHT_LABELS = {pattern:'패턴',recurring:'반복',heavy:'무게감',conflict:'갈등',root:'근본 고민'};
+const LOCAL_KEY = 'mind-dump-v4-state';
+
+// ════════════════ STATE ════════════════════════════════
+const state = {
+  version:2, createdAt:Date.now(), lastAnalyzed:0,
+  categories:[], subcategories:[], thoughts:[],
+  relationships:[], thoughtRelationships:[],
+  insights:[], hideResolved:false,
+  pendingCaptures:[], snapshots:[]
+};
+
+function genId(prefix='id'){return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,7)}`}
+function resetState(){Object.assign(state,{version:2,createdAt:Date.now(),lastAnalyzed:0,categories:[],subcategories:[],thoughts:[],relationships:[],thoughtRelationships:[],insights:[],hideResolved:false,pendingCaptures:[],snapshots:[]})}
+function loadStateData(data){if(!data||typeof data!=='object')return;['version','createdAt','lastAnalyzed','categories','subcategories','thoughts','relationships','thoughtRelationships','insights','hideResolved','pendingCaptures','snapshots'].forEach(k=>{if(data[k]!==undefined)state[k]=data[k]})}
+
+// ════════════════ STORAGE ══════════════════════════════
+function saveLocal(){try{localStorage.setItem(LOCAL_KEY,JSON.stringify(state))}catch(e){}}
+function loadLocal(){try{const r=localStorage.getItem(LOCAL_KEY);if(r){loadStateData(JSON.parse(r));return true}}catch(e){}return false}
+
+// ════════════════ CAMERA ══════════════════════════════
+let cam={px:0,py:0,scale:1};
+let W=window.innerWidth, H=window.innerHeight-48-64;
+function updateDims(){W=window.innerWidth;H=(document.getElementById('canvas-wrap')||{clientHeight:window.innerHeight-48-64}).clientHeight||window.innerHeight-48-64}
+function applyCamera(){const w=document.getElementById('world');if(w)w.setAttribute('transform',`translate(${cam.px.toFixed(1)},${cam.py.toFixed(1)}) scale(${cam.scale.toFixed(5)})`)}
+function zoomAtRaw(sx,sy,ns){const wx=(sx-cam.px)/cam.scale,wy=(sy-cam.py)/cam.scale;cam.scale=Math.max(.2,Math.min(6,ns));cam.px=sx-wx*cam.scale;cam.py=sy-wy*cam.scale}
+function screenToWorld(sx,sy){return{x:(sx-cam.px)/cam.scale,y:(sy-cam.py)/cam.scale}}
+
+const anim={active:false,rafId:null,zVel:0,zSx:0,zSy:0,pvx:0,pvy:0};
+function addZoomImpulse(sx,sy,imp){anim.zVel+=imp;anim.zSx=sx;anim.zSy=sy;startAnim()}
+function addPanV(vx,vy){anim.pvx=vx;anim.pvy=vy;startAnim()}
+function startAnim(){if(anim.active)return;anim.active=true;anim.rafId=requestAnimationFrame(animTick)}
+function animTick(){let nr=false;
+  if(Math.abs(anim.zVel)>.0005){zoomAtRaw(anim.zSx,anim.zSy,cam.scale*(1+anim.zVel));anim.zVel*=.88;nr=true}else anim.zVel=0;
+  if(Math.abs(anim.pvx)>.3||Math.abs(anim.pvy)>.3){cam.px+=anim.pvx;cam.py+=anim.pvy;anim.pvx*=.92;anim.pvy*=.92;nr=true}else{anim.pvx=0;anim.pvy=0}
+  if(nr){try{applyCamera()}catch(e){}anim.rafId=requestAnimationFrame(animTick)}else{anim.active=false;anim.rafId=null}}
+function stopAnim(){anim.pvx=0;anim.pvy=0;anim.zVel=0}
+
+function fitAll(){
+  computeLayout();
+  const ids=Object.keys(layouts);
+  if(ids.length===0){cam={px:W/2,py:H/2,scale:1};applyCamera();return}
+  let x1=Infinity,x2=-Infinity,y1=Infinity,y2=-Infinity;
+  ids.forEach(id=>{const l=layouts[id];if(l.x<x1)x1=l.x;if(l.x>x2)x2=l.x;if(l.y<y1)y1=l.y;if(l.y>y2)y2=l.y});
+  const p=80,rX=(x2-x1)+p*2,rY=(y2-y1)+p*2;
+  cam.scale=Math.max(.2,Math.min(2,Math.min(W/rX,H/rY)));
+  cam.px=W/2-((x1+x2)/2)*cam.scale;cam.py=H/2-((y1+y2)/2)*cam.scale;applyCamera()
+}
+
+// ════════════════ LAYOUT ══════════════════════════════
+let layouts={};
+function computeLayout(){
+  const cx=W/2,cy=H/2;
+  layouts={};
+  const breathe=0.7+Math.min(cam.scale,3)*0.35;
+  state.categories.forEach((cat,i)=>{
+    const n=state.categories.length,br=Math.max(Math.min(W,H)*.22,n*38)*(.85+breathe*.15);
+    const angle=(i/n)*2*Math.PI-Math.PI/2;
+    layouts[cat.id]={x:cx+br*Math.cos(angle),y:cy+br*Math.sin(angle),radius:22,_angle:angle}
+  });
+  state.subcategories.forEach(sub=>{
+    const pp=state.categories.find(c=>c.id===sub.parentId);
+    if(!pp||!layouts[pp.id])return;
+    const pl=layouts[pp.id],sibs=state.subcategories.filter(s=>s.parentId===sub.parentId);
+    const pa=Math.atan2(pl.y-cy,pl.x-cx),spread=Math.min(Math.PI*.7,sibs.length*.4);
+    const idx=sibs.findIndex(s=>s.id===sub.id),t=sibs.length>1?idx/(sibs.length-1):.5;
+    const sa=pa-spread/2+spread*t,bd=Math.max(Math.min(W,H)*.09,sibs.length*24);
+    layouts[sub.id]={x:pl.x+bd*breathe*Math.cos(sa),y:pl.y+bd*breathe*Math.sin(sa),radius:12,_angle:sa}
+  });
+  state.thoughts.forEach(t=>{
+    if(state.hideResolved&&t.resolved)return;
+    const sub=state.subcategories.find(s=>s.id===t.subcategoryId);
+    if(!sub||!layouts[sub.id])return;
+    const sl=layouts[sub.id],sibs=state.thoughts.filter(x=>x.subcategoryId===t.subcategoryId&&(!state.hideResolved||!x.resolved));
+    const idx=sibs.findIndex(x=>x.id===t.id);if(idx<0)return;
+    const ba=sl._angle||0,spread=Math.min(Math.PI*.8,sibs.length*.5),tt=sibs.length>1?idx/(sibs.length-1):.5;
+    const ang=ba-spread/2+spread*tt,bd=Math.max(Math.min(W,H)*.045,sibs.length*12);
+    layouts[t.id]={x:sl.x+bd*breathe*1.1*Math.cos(ang),y:sl.y+bd*breathe*1.1*Math.sin(ang),radius:3+t.weight*7}
+  });
+  // Repulsion: subs
+  const smn=35*breathe;
+  state.subcategories.forEach((s,i)=>{if(!layouts[s.id])return;for(let j=i+1;j<state.subcategories.length;j++){const o=state.subcategories[j];if(!layouts[o.id])continue;const dx=layouts[o.id].x-layouts[s.id].x,dy=layouts[o.id].y-layouts[s.id].y,d=Math.sqrt(dx*dx+dy*dy);if(d<smn&&d>0){const f=(smn-d)/2,ra=Math.atan2(dy,dx);layouts[s.id].x-=f*Math.cos(ra);layouts[s.id].y-=f*Math.sin(ra);layouts[o.id].x+=f*Math.cos(ra);layouts[o.id].y+=f*Math.sin(ra)}}});
+  // Repulsion: thoughts
+  const tmn=12*breathe;
+  state.thoughts.forEach((t,i)=>{if(!layouts[t.id])return;for(let j=i+1;j<state.thoughts.length;j++){const o=state.thoughts[j];if(!layouts[o.id])continue;const dx=layouts[o.id].x-layouts[t.id].x,dy=layouts[o.id].y-layouts[t.id].y,d=Math.sqrt(dx*dx+dy*dy);if(d<tmn&&d>0){const f=(tmn-d)/2,ra=Math.atan2(dy,dx);layouts[t.id].x-=f*Math.cos(ra);layouts[t.id].y-=f*Math.sin(ra);layouts[o.id].x+=f*Math.cos(ra);layouts[o.id].y+=f*Math.sin(ra)}}});
+}
+function hitTest(wx,wy){
+  for(let i=state.thoughts.length-1;i>=0;i--){const t=state.thoughts[i];if(state.hideResolved&&t.resolved)continue;const l=layouts[t.id];if(!l)continue;if(Math.hypot(wx-l.x,wy-l.y)<Math.max(l.radius+6,12))return{type:'thought',id:t.id}}
+  for(const s of state.subcategories){const l=layouts[s.id];if(l&&Math.hypot(wx-l.x,wy-l.y)<20)return{type:'subcategory',id:s.id}}
+  for(const c of state.categories){const l=layouts[c.id];if(l&&Math.hypot(wx-l.x,wy-l.y)<30)return{type:'category',id:c.id}}
+  return null
+}
+
+// ════════════════ RENDER ═══════════════════════════════
+let selected=null;
+function render(reason){
+  const svg=document.getElementById('main-svg');if(!svg)return;
+  svg.setAttribute('width',W);svg.setAttribute('height',H);
+  computeLayout();
+  const world=document.getElementById('world');if(!world)return;
+  const dim=getDimSet();
+  let html='';
+  html+=renderCatRels(dim);
+  html+=renderSubLines(dim);
+  html+=renderThoughtLines(dim);
+  if(selected?.type==='thought')html+=renderThoughtRels(selected.id,dim);
+  html+=renderThoughts(dim);
+  html+=renderSubs(dim);
+  html+=renderCats(dim);
+  world.innerHTML=html;
+  const hasContent=state.categories.length>0||state.thoughts.length>0;
+  const el=document.getElementById('empty-state');if(el)el.classList.toggle('hidden',hasContent);
+  updateStats();updateEmotionTint();updateSnapSlider()
+}
+
+function getDimSet(){
+  if(!selected)return null;
+  const dim=new Set(),bright=new Set();
+  if(selected.type==='category'){
+    const cid=selected.id;bright.add(cid);
+    state.subcategories.filter(s=>s.parentId===cid).forEach(s=>{bright.add(s.id);state.thoughts.filter(t=>t.subcategoryId===s.id).forEach(t=>bright.add(t.id))});
+    state.relationships.forEach(r=>{if(r.from===cid)bright.add(r.to);if(r.to===cid)bright.add(r.from)})
+  }else if(selected.type==='subcategory'){
+    const sid=selected.id;bright.add(sid);
+    const s=state.subcategories.find(x=>x.id===sid);if(s)bright.add(s.parentId);
+    state.thoughts.filter(t=>t.subcategoryId===sid).forEach(t=>bright.add(t.id))
+  }else if(selected.type==='thought'){
+    const tid=selected.id;bright.add(tid);
+    const t=state.thoughts.find(x=>x.id===tid);
+    if(t){bright.add(t.subcategoryId);const s=state.subcategories.find(x=>x.id===t.subcategoryId);if(s)bright.add(s.parentId)}
+    state.thoughtRelationships.forEach(r=>{if(r.from===tid)bright.add(r.to);if(r.to===tid)bright.add(r.from)})
+  }
+  [...state.categories,...state.subcategories,...state.thoughts].forEach(x=>{if(!bright.has(x.id))dim.add(x.id)});
+  return{dim,bright}
+}
+
+function renderCatRels(dm){
+  let h='';
+  state.relationships.forEach(rel=>{
+    const fp=layouts[rel.from],tp=layouts[rel.to];if(!fp||!tp)return;
+    const rt=REL_TYPES[rel.type]||REL_TYPES.connects;
+    const dx=tp.x-fp.x,dy=tp.y-fp.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<1)return;
+    const mx=(fp.x+tp.x)/2,my=(fp.y+tp.y)/2;
+    const pk=[rel.from,rel.to].sort().join('|');
+    const pr=state.relationships.filter(r=>[r.from,r.to].sort().join('|')===pk);
+    const pi=pr.indexOf(rel);let cpOff;
+    if(pr.length<=1)cpOff=dist*.28;else{const sg=pi%2===0?1:-1,mg=.6+Math.floor(pi/2)*.55;cpOff=dist*.28*sg*mg}
+    const cpx=mx-(dy/dist)*cpOff,cpy=my+(dx/dist)*cpOff;
+    const fa=Math.atan2(cpy-fp.y,cpx-fp.x),ta=Math.atan2(cpy-tp.y,cpx-tp.x);
+    const fx=fp.x+fp.radius*Math.cos(fa),fy=fp.y+fp.radius*Math.sin(fa),tx=tp.x+tp.radius*Math.cos(ta),ty=tp.y+tp.radius*Math.sin(ta);
+    const dash=rt.dash==='none'?'':`stroke-dasharray="${rt.dash}"`;
+    const marker=rt.arrow?`marker-end="url(#${rt.marker})"`:''
+    const isDim=dm&&(dm.dim.has(rel.from)||dm.dim.has(rel.to));
+    const op=isDim?.08:(rel.strength||.6)*.7;
+    h+=`<path d="M ${fx},${fy} Q ${cpx},${cpy} ${tx},${ty}" fill="none" stroke="${rt.color}" stroke-width="${rt.width}" ${dash} ${marker} opacity="${op}" vector-effect="non-scaling-stroke"/>`;
+    if(!isDim&&rel.label){const bx=.25*fx+.5*cpx+.25*tx,by=.25*fy+.5*cpy+.25*ty;h+=`<text x="${bx}" y="${by-5}" text-anchor="middle" fill="${rt.color}" font-size="8" opacity="${op}" font-family="Inter,sans-serif">${esc(rel.label)}</text>`}
+  });return h
+}
+
+function renderSubLines(dm){
+  let h='';
+  state.subcategories.forEach(sub=>{
+    const sp=layouts[sub.id],pp=layouts[sub.parentId];if(!sp||!pp)return;
+    const cat=state.categories.find(c=>c.id===sub.parentId),idx=cat?state.categories.indexOf(cat):0;
+    const col=COLORS[idx%COLORS.length].main,isDim=dm&&dm.dim.has(sub.id);
+    h+=`<line x1="${pp.x}" y1="${pp.y}" x2="${sp.x}" y2="${sp.y}" stroke="${col}" stroke-width="1" stroke-dasharray="4 6" opacity="${isDim?.05:.25}" vector-effect="non-scaling-stroke"/>`;
+  });return h
+}
+
+function renderThoughtLines(dm){
+  let h='';
+  state.thoughts.forEach(t=>{
+    if(state.hideResolved&&t.resolved)return;
+    const tp=layouts[t.id],sp=layouts[t.subcategoryId];if(!tp||!sp)return;
+    const emo=EMOTION[t.emotion]||EMOTION.neutral,isDim=dm&&dm.dim.has(t.id);
+    h+=`<line x1="${sp.x}" y1="${sp.y}" x2="${tp.x}" y2="${tp.y}" stroke="${emo.color}" stroke-width="1" opacity="${isDim?.03:.2}" vector-effect="non-scaling-stroke"/>`;
+  });return h
+}
+
+function renderThoughtRels(tid,dm){
+  let h='';
+  const t=state.thoughts.find(x=>x.id===tid);
+  if(t){const sibs=state.thoughts.filter(s=>s.subcategoryId===t.subcategoryId&&s.id!==tid);
+    sibs.forEach(s=>{const ap=layouts[tid],bp=layouts[s.id];if(!ap||!bp)return;h+=`<line x1="${ap.x}" y1="${ap.y}" x2="${bp.x}" y2="${bp.y}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 5" opacity=".3" vector-effect="non-scaling-stroke"/>`;})
+  }
+  state.thoughtRelationships.forEach(r=>{
+    if(r.from!==tid&&r.to!==tid)return;
+    const ap=layouts[r.from],bp=layouts[r.to];if(!ap||!bp)return;
+    const rt=REL_TYPES[r.type]||REL_TYPES.connects,dash=rt.dash==='none'?'':`stroke-dasharray="${rt.dash}"`;
+    h+=`<line x1="${ap.x}" y1="${ap.y}" x2="${bp.x}" y2="${bp.y}" stroke="${rt.color}" stroke-width="1.5" ${dash} opacity=".7" vector-effect="non-scaling-stroke"/>`;
+    if(r.label){const mx=(ap.x+bp.x)/2,my=(ap.y+bp.y)/2;h+=`<text x="${mx}" y="${my-4}" text-anchor="middle" fill="${rt.color}" font-size="7" opacity=".8" font-family="Inter,sans-serif">${esc(r.label)}</text>`}
+  });return h
+}
+
+function renderThoughts(dm){
+  let h='';const now=Date.now();
+  state.thoughts.forEach(t=>{
+    if(state.hideResolved&&t.resolved)return;
+    const l=layouts[t.id];if(!l)return;
+    const emo=EMOTION[t.emotion]||EMOTION.neutral,r=l.radius,hitR=Math.max(r+6,12);
+    const isSel=selected?.type==='thought'&&selected?.id===t.id,isDim=dm&&dm.dim.has(t.id);
+    const ad=(now-(t.lastSeen||t.firstSeen||now))/86400000;
+    let af;if(ad<1)af=1;else if(ad<3)af=.85;else if(ad<7)af=.7;else if(ad<14)af=.5;else if(ad<30)af=.35;else af=.25;
+    if((t.occurrences||1)>1)af=Math.min(1,af+.15);
+    const op=isDim?.12:(isSel?1:af*.85);
+    h+=`<g class="thought-node${isDim?' dimmed':''}" data-thought="${t.id}" opacity="${op}">`;
+    h+=`<circle cx="${l.x}" cy="${l.y}" r="${hitR}" fill="transparent" pointer-events="all"/>`;
+    if(isSel)h+=`<circle cx="${l.x}" cy="${l.y}" r="${r+8}" fill="${emo.color}" opacity=".15"/>`;
+    if((t.urgency||0)>.6)h+=`<circle cx="${l.x}" cy="${l.y}" r="${r+4}" fill="none" stroke="${emo.color}" stroke-width="1" stroke-dasharray="3 3" opacity=".5" vector-effect="non-scaling-stroke"/>`;
+    if((t.occurrences||1)>1){const rgs=Math.min(t.occurrences-1,5);for(let i=1;i<=rgs;i++)h+=`<circle cx="${l.x}" cy="${l.y}" r="${r+i*3}" fill="none" stroke="${emo.color}" stroke-width=".5" opacity="${.15-i*.025}" vector-effect="non-scaling-stroke"/>`}
+    h+=`<circle cx="${l.x}" cy="${l.y}" r="${r}" fill="${emo.color}" pointer-events="none"/>`;
+    const isNew=(now-(t.firstSeen||now))<7200000;
+    if(isNew&&!isDim)h+=`<circle cx="${l.x}" cy="${l.y}" r="${r}" fill="none" stroke="${emo.color}" stroke-width="1.5" opacity="0" vector-effect="non-scaling-stroke"><animate attributeName="r" from="${r}" to="${r+18}" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" from=".5" to="0" dur="2s" repeatCount="indefinite"/></circle>`;
+    if(t.resolved)h+=`<line x1="${l.x-r}" y1="${l.y}" x2="${l.x+r}" y2="${l.y}" stroke="rgba(255,255,255,.4)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>`;
+    h+=`<text x="${l.x}" y="${l.y-r-5}" text-anchor="middle" font-size="${isSel?13:10}" pointer-events="none" opacity="${isDim?.3:1}">${emo.glyph}</text>`;
+    if(isSel&&t.text){
+      // 선택 시: 전체 텍스트 여러 줄
+      const words=t.text.split(' ');const lines=[];let ln='';words.forEach(w=>{if((ln+w).length>18){lines.push(ln.trim());ln=w+' '}else ln+=w+' '});if(ln.trim())lines.push(ln.trim());
+      const sy=l.y+r+14;lines.slice(0,4).forEach((ll,i)=>h+=`<text x="${l.x}" y="${sy+i*13}" text-anchor="middle" fill="#dce1fb" font-size="10" pointer-events="none" font-family="Inter,sans-serif" filter="url(#textbg)">${esc(ll)}</text>`);
+    }else if(t.text&&!isDim){
+      // 평소: 첫 줄 짧게 (최대 12자)
+      const short=t.text.length>12?t.text.slice(0,11)+'…':t.text;
+      h+=`<text x="${l.x}" y="${l.y+r+13}" text-anchor="middle" fill="#dce1fb" font-size="9" pointer-events="none" font-family="Inter,sans-serif" opacity="${op*.9}">${esc(short)}</text>`;
+    }
+    h+='</g>';
+  });return h
+}
+
+function renderSubs(dm){
+  let h='';
+  state.subcategories.forEach(sub=>{
+    const l=layouts[sub.id];if(!l)return;
+    const cat=state.categories.find(c=>c.id===sub.parentId),idx=cat?state.categories.indexOf(cat):0,col=COLORS[idx%COLORS.length];
+    const isSel=selected?.type==='subcategory'&&selected?.id===sub.id,isDim=dm&&dm.dim.has(sub.id);
+    h+=`<g class="sub-node${isDim?' dimmed':''}" data-subcategory="${sub.id}" opacity="${isDim?.12:1}">`;
+    if(isSel)h+=`<circle cx="${l.x}" cy="${l.y}" r="20" fill="${col.glow}" opacity=".8"/>`;
+    h+=`<circle cx="${l.x}" cy="${l.y}" r="${l.radius}" fill="${isSel?col.main:col.dim}" stroke="${col.main}" stroke-width="${isSel?2:1.5}" opacity="${isDim?.4:1}" vector-effect="non-scaling-stroke"/>`;
+    h+=`<text x="${l.x}" y="${l.y+20}" text-anchor="middle" fill="${col.text}" font-size="9" pointer-events="none" font-family="Inter,sans-serif" opacity="${isDim?.3:.8}">${esc(sub.name)}</text>`;
+    h+='</g>';
+  });return h
+}
+
+const FLOAT_ANIMS=['float-a','float-b','float-c','float-d','float-e','float-f'];
+function renderCats(dm){
+  let h='';
+  state.categories.forEach((cat,idx)=>{
+    const l=layouts[cat.id];if(!l)return;
+    const col=COLORS[idx%COLORS.length],isSel=selected?.type==='category'&&selected?.id===cat.id,isDim=dm&&dm.dim.has(cat.id);
+    h+=`<g class="cat-node${isDim?' dimmed':''}" data-category="${cat.id}" opacity="${isDim?.12:1}">`;
+    h+=`<g style="animation:${FLOAT_ANIMS[idx%6]} ${8+idx}s ease-in-out infinite"><circle cx="${l.x}" cy="${l.y}" r="${l.radius*2.5}" fill="${col.glow}" opacity="${isDim?.3:.6}"/></g>`;
+    if(cat.isRoot)h+=`<circle cx="${l.x}" cy="${l.y}" r="${l.radius+6}" fill="none" stroke="#f9bd22" stroke-width="2" style="filter:drop-shadow(0 0 6px rgba(249,189,34,.6))" vector-effect="non-scaling-stroke"/>`;
+    if(isSel)h+=`<circle cx="${l.x}" cy="${l.y}" r="${l.radius+3}" fill="none" stroke="${col.main}" stroke-width="2" opacity=".7" vector-effect="non-scaling-stroke"/>`;
+    h+=`<circle cx="${l.x}" cy="${l.y}" r="${l.radius}" fill="${col.dim}" stroke="${col.main}" stroke-width="2" vector-effect="non-scaling-stroke"/>`;
+    h+=`<text x="${l.x}" y="${l.y+l.radius+15}" text-anchor="middle" fill="${col.text}" font-size="11" font-weight="600" pointer-events="none" font-family="Manrope,sans-serif" opacity="${isDim?.3:1}">${esc(cat.name)}</text>`;
+    h+='</g>';
+  });return h
+}
+
+function renderStars(){
+  const svg=document.getElementById('star-svg');if(!svg)return;
+  const sw=window.innerWidth,sh=window.innerHeight;
+  svg.setAttribute('viewBox',`0 0 ${sw} ${sh}`);let h='';
+  for(let i=0;i<90;i++){const x=Math.random()*sw,y=Math.random()*sh,r=Math.random()*1.2+.3,dl=(Math.random()*4).toFixed(1),dr=(2+Math.random()*3).toFixed(1);h+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="white" opacity=".3" style="animation:twinkle ${dr}s ${dl}s ease-in-out infinite"/>`}
+  svg.innerHTML=h
+}
+
+function updateStats(){
+  const e=(id,t)=>{const el=document.getElementById(id);if(el)el.textContent=t};
+  e('stat-thoughts',`생각 ${state.thoughts.filter(t=>!t.resolved).length}`);
+  e('stat-categories',`분류 ${state.subcategories.length}`);
+  e('stat-cats',`카테고리 ${state.categories.length}`)
+}
+
+function updateEmotionTint(){
+  const tint=document.getElementById('emotion-tint');if(!tint)return;
+  const active=state.thoughts.filter(t=>!t.resolved);
+  if(!active.length){tint.style.background='none';return}
+  const counts={};active.forEach(t=>{counts[t.emotion]=(counts[t.emotion]||0)+1});
+  const dom=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+  if(!dom||dom[1]/active.length<.2){tint.style.background='none';return}
+  const ec={anxiety:'#f87171',frustration:'#ef4444',anticipation:'#fb923c',conflict:'#c084fc',relief:'#34d399',pride:'#fbbf24',sadness:'#60a5fa',neutral:'#94a3b8'};
+  tint.style.background=`radial-gradient(ellipse at 50% 50%,${ec[dom[0]]||'#94a3b8'}08 0%,transparent 70%)`
+}
+
+function updateSnapSlider(){
+  const bar=document.getElementById('snapshot-slider-bar');
+  if(bar)bar.style.display=state.snapshots.length>=2?'flex':'none'
+}
+
+// ════════════════ EVENTS ══════════════════════════════
+let isDragging=false,dragSX=0,dragSY=0,lastPX=0,lastPY=0,lastPT=0,pvx=0,pvy=0,moved=0,nodeSuppressed=false;
+let touches=[];
+const touchSt={active:false,dist:0,cx:0,cy:0};
+
+function initEvents(){
+  const svg=document.getElementById('main-svg');if(!svg)return;
+  svg.addEventListener('mousedown',onMD);
+  window.addEventListener('mousemove',onMM);
+  window.addEventListener('mouseup',onMU);
+  svg.addEventListener('wheel',onWH,{passive:false});
+  svg.addEventListener('click',onSvgClick);
+  svg.addEventListener('touchstart',onTS,{passive:false});
+  svg.addEventListener('touchmove',onTM,{passive:false});
+  svg.addEventListener('touchend',onTE,{passive:false});
+  window.addEventListener('keydown',onKD);
+  document.getElementById('zoom-in-btn')?.addEventListener('click',()=>zoomCenter(1.3));
+  document.getElementById('zoom-out-btn')?.addEventListener('click',()=>zoomCenter(1/1.3));
+  document.getElementById('zoom-fit-btn')?.addEventListener('click',()=>{fitAll();render('fit')});
+  window.addEventListener('resize',()=>{updateDims();render('resize');renderStars()});
+}
+
+function zoomCenter(f){const cw=document.getElementById('canvas-wrap');const r=cw?cw.getBoundingClientRect():{left:0,top:0};zoomAtRaw(cw.clientWidth/2,cw.clientHeight/2,cam.scale*f);applyCamera()}
+function onMD(e){if(e.button!==0)return;stopAnim();isDragging=true;dragSX=e.clientX;dragSY=e.clientY;lastPX=e.clientX;lastPY=e.clientY;lastPT=Date.now();pvx=0;pvy=0;moved=0;nodeSuppressed=false}
+function onMM(e){if(!isDragging)return;const dx=e.clientX-lastPX,dy=e.clientY-lastPY;cam.px+=dx;cam.py+=dy;applyCamera();moved+=Math.abs(dx)+Math.abs(dy);if(moved>8)nodeSuppressed=true;pvx=dx;pvy=dy;lastPX=e.clientX;lastPY=e.clientY}
+function onMU(){if(!isDragging)return;isDragging=false;if(moved>8&&(Math.abs(pvx)>1||Math.abs(pvy)>1))addPanV(pvx*1.5,pvy*1.5)}
+function onSvgClick(e){
+  if(nodeSuppressed){nodeSuppressed=false;return}
+  const cw=document.getElementById('canvas-wrap'),r=cw?cw.getBoundingClientRect():{left:0,top:0};
+  const {x:wx,y:wy}=screenToWorld(e.clientX-r.left,e.clientY-r.top);
+  const hit=hitTest(wx,wy);
+  if(hit){selected=hit;showSheet(hit);render('selection')}
+  else if(selected){selected=null;hideSheet();render('deselect')}
+}
+function onWH(e){
+  e.preventDefault();
+  const cw=document.getElementById('canvas-wrap'),r=cw?cw.getBoundingClientRect():{left:0,top:0};
+  addZoomImpulse(e.clientX-r.left,e.clientY-r.top,-e.deltaY*.0008)
+}
+function getTD(ts){const dx=ts[0].clientX-ts[1].clientX,dy=ts[0].clientY-ts[1].clientY;return Math.sqrt(dx*dx+dy*dy)}
+function onTS(e){
+  e.preventDefault();stopAnim();touches=Array.from(e.touches);
+  if(touches.length===1){isDragging=true;dragSX=touches[0].clientX;dragSY=touches[0].clientY;lastPX=touches[0].clientX;lastPY=touches[0].clientY;lastPT=Date.now();pvx=0;pvy=0;moved=0;nodeSuppressed=false;touchSt.active=false}
+  else if(touches.length===2){isDragging=false;touchSt.active=true;touchSt.dist=getTD(touches);touchSt.cx=(touches[0].clientX+touches[1].clientX)/2;touchSt.cy=(touches[0].clientY+touches[1].clientY)/2}
+}
+function onTM(e){
+  e.preventDefault();touches=Array.from(e.touches);
+  if(touches.length===1&&isDragging){const dx=touches[0].clientX-lastPX,dy=touches[0].clientY-lastPY;cam.px+=dx;cam.py+=dy;applyCamera();moved+=Math.abs(dx)+Math.abs(dy);if(moved>8)nodeSuppressed=true;pvx=dx;pvy=dy;lastPX=touches[0].clientX;lastPY=touches[0].clientY}
+  else if(touches.length===2&&touchSt.active){const nd=getTD(touches),ncx=(touches[0].clientX+touches[1].clientX)/2,ncy=(touches[0].clientY+touches[1].clientY)/2;const cw=document.getElementById('canvas-wrap'),r=cw?cw.getBoundingClientRect():{left:0,top:0};if(touchSt.dist>0)zoomAtRaw(ncx-r.left,ncy-r.top,cam.scale*(nd/touchSt.dist));cam.px+=ncx-touchSt.cx;cam.py+=ncy-touchSt.cy;applyCamera();touchSt.dist=nd;touchSt.cx=ncx;touchSt.cy=ncy;nodeSuppressed=true}
+}
+function onTE(e){
+  e.preventDefault();const rt=Array.from(e.touches);
+  if(rt.length===0){
+    if(isDragging&&moved<=8){const cw=document.getElementById('canvas-wrap'),r=cw?cw.getBoundingClientRect():{left:0,top:0};const {x:wx,y:wy}=screenToWorld(dragSX-r.left,dragSY-r.top);const hit=hitTest(wx,wy);if(hit){selected=hit;showSheet(hit);render('selection')}else if(selected){selected=null;hideSheet();render('deselect')}}
+    else if(isDragging&&(Math.abs(pvx)>1||Math.abs(pvy)>1))addPanV(pvx*2,pvy*2);
+    isDragging=false;touchSt.active=false;
+  }else if(rt.length===1){touchSt.active=false;isDragging=true;lastPX=rt[0].clientX;lastPY=rt[0].clientY;moved=99;nodeSuppressed=true}
+  touches=rt
+}
+function onKD(e){
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  if(e.key==='+'||e.key==='='){e.preventDefault();zoomCenter(1.2)}
+  else if(e.key==='-'){e.preventDefault();zoomCenter(1/1.2)}
+  else if(e.key==='0'){e.preventDefault();fitAll();render('fit')}
+  else if(e.key==='Escape'&&selected){selected=null;hideSheet();render('deselect')}
+  else if(e.key==='/'&&e.target.tagName!=='INPUT')openSession()
+  else if(e.key==='r'||e.key==='R'){state.hideResolved=!state.hideResolved;render('toggle')}
+}
+
+// ════════════════ UI COMPONENTS ═══════════════════════
+// Bottom Sheet
+let swipeY=null;
+function initSheet(){
+  const handle=document.getElementById('sheet-handle');
+  if(!handle)return;
+  handle.addEventListener('touchstart',e=>{swipeY=e.touches[0].clientY},{passive:true});
+  handle.addEventListener('touchmove',e=>{if(swipeY===null)return;if(e.touches[0].clientY-swipeY>60){hideSheet();selected=null;render('deselect')}},{passive:true});
+  handle.addEventListener('touchend',()=>{swipeY=null},{passive:true});
+}
+function showSheet(hit){
+  const sheet=document.getElementById('bottom-sheet'),content=document.getElementById('sheet-content');
+  if(!sheet||!content)return;
+  content.innerHTML=buildSheet(hit);sheet.classList.add('open');bindSheet(hit)
+}
+function hideSheet(){const s=document.getElementById('bottom-sheet');if(s)s.classList.remove('open')}
+function buildSheet(hit){
+  if(hit.type==='thought')return buildThoughtSheet(hit.id);
+  if(hit.type==='subcategory')return buildSubSheet(hit.id);
+  if(hit.type==='category')return buildCatSheet(hit.id);
+  return ''
+}
+function buildThoughtSheet(id){
+  const t=state.thoughts.find(x=>x.id===id);if(!t)return '';
+  const sub=state.subcategories.find(s=>s.id===t.subcategoryId),cat=sub?state.categories.find(c=>c.id===sub.parentId):null;
+  const ci=cat?state.categories.indexOf(cat):0,col=COLORS[ci%COLORS.length],emo=EMOTION[t.emotion]||EMOTION.neutral;
+  const rels=state.thoughtRelationships.filter(r=>r.from===id||r.to===id).map(r=>{const oid=r.from===id?r.to:r.from;return{rel:r,t:state.thoughts.find(x=>x.id===oid)}}).filter(x=>x.t);
+  return`<div class="sheet-breadcrumb">${esc(cat?.name||'')} › ${esc(sub?.name||'')}</div>
+<div id="tdisp" class="sheet-title" style="cursor:pointer">${esc(t.text)}</div>
+<div id="tedit" style="display:none"><textarea class="thought-edit-area" id="tedit-ta">${esc(t.text)}</textarea><button class="sheet-btn" id="tedit-save" style="margin-top:6px">저장</button><button class="sheet-btn" id="tedit-cancel" style="margin-top:6px;margin-left:6px">취소</button></div>
+<div style="margin-top:10px"><span class="emotion-chip" style="background:${emo.color}18;color:${emo.color}">${emo.glyph} ${emo.label}</span>${t.resolved?'<span class="emotion-chip" style="background:rgba(255,255,255,.08);color:#909097;margin-left:6px">✓ 해결됨</span>':''}</div>
+<div class="sheet-section"><div class="sheet-section-label">무게감</div><div class="bar-wrap"><span class="bar-label">${((t.weight||.5)*100).toFixed(0)}%</span><div class="bar-track"><div class="bar-fill" style="width:${(t.weight||.5)*100}%"></div></div></div>
+<div class="sheet-section-label" style="margin-top:8px">긴급함</div><div class="bar-wrap"><span class="bar-label">${((t.urgency||.5)*100).toFixed(0)}%</span><div class="bar-track"><div class="bar-fill" style="width:${(t.urgency||.5)*100}%;background:#fb923c"></div></div></div></div>
+${rels.length?`<div class="sheet-section"><div class="sheet-section-label">연결된 생각</div>${rels.map(({rel,t:rt})=>{const e2=EMOTION[rt.emotion]||EMOTION.neutral;return`<div class="thought-list-item"><div class="thought-dot" style="background:${e2.color}"></div><div><div>${esc(rt.text)}</div>${rel.label?`<div style="font-size:11px;color:#909097">${esc(rel.label)}</div>`:''}</div></div>`}).join('')}</div>`:''}
+<div class="sheet-actions"><button class="sheet-btn" id="s-resolve">${t.resolved?'해결 취소':'해결됨'}</button><button class="sheet-btn" id="s-move">이동</button><button class="sheet-btn danger" id="s-delete">삭제</button></div>`
+}
+function buildSubSheet(id){
+  const sub=state.subcategories.find(s=>s.id===id);if(!sub)return '';
+  const cat=state.categories.find(c=>c.id===sub.parentId),ci=cat?state.categories.indexOf(cat):0,col=COLORS[ci%COLORS.length];
+  const thoughts=state.thoughts.filter(t=>t.subcategoryId===id);
+  return`<div class="sheet-breadcrumb">${esc(cat?.name||'')}</div>
+<div class="sheet-title" style="color:${col.text}">${esc(sub.name)}</div>
+<div class="sheet-section"><div class="sheet-section-label">생각 ${thoughts.length}개</div>${thoughts.map(t=>{const e=EMOTION[t.emotion]||EMOTION.neutral;return`<div class="thought-list-item"><div class="thought-dot" style="background:${e.color}"></div><div>${esc(t.text)}${t.resolved?' <span style="color:#909097;font-size:11px">(해결됨)</span>':''}</div></div>`}).join('')}</div>`
+}
+function buildCatSheet(id){
+  const cat=state.categories.find(c=>c.id===id);if(!cat)return '';
+  const ci=state.categories.indexOf(cat),col=COLORS[ci%COLORS.length];
+  const subs=state.subcategories.filter(s=>s.parentId===id),tc=state.thoughts.filter(t=>subs.some(s=>s.id===t.subcategoryId)).length;
+  const rels=state.relationships.filter(r=>r.from===id||r.to===id).map(r=>{const oid=r.from===id?r.to:r.from;return{r,name:state.categories.find(c=>c.id===oid)?.name||'?'}});
+  return`<div class="sheet-title" style="color:${col.text}">${cat.isRoot?'✦ ':''}${esc(cat.name)}</div>
+${cat.description?`<div style="font-size:13px;color:#909097;margin-top:4px">${esc(cat.description)}</div>`:''}
+<div style="font-size:12px;color:#909097;margin-top:8px">생각 ${tc}개 · 세분류 ${subs.length}개</div>
+${rels.length?`<div class="sheet-section"><div class="sheet-section-label">관계</div>${rels.map(({r,name})=>`<div style="font-size:13px;padding:4px 0">${esc(name)}: ${esc(r.label||r.type)}</div>`).join('')}</div>`:''}
+<div class="sheet-section"><div class="sheet-section-label">세분류</div>${subs.map(s=>`<div style="font-size:13px;padding:3px 0;color:${col.text}">${esc(s.name)}</div>`).join('')}</div>`
+}
+function bindSheet(hit){
+  if(hit.type!=='thought')return;
+  const id=hit.id,t=state.thoughts.find(x=>x.id===id);if(!t)return;
+  document.getElementById('tdisp')?.addEventListener('click',()=>{document.getElementById('tdisp').style.display='none';document.getElementById('tedit').style.display='block';document.getElementById('tedit-ta')?.focus()});
+  document.getElementById('tedit-save')?.addEventListener('click',()=>{const nt=document.getElementById('tedit-ta')?.value.trim();if(nt&&nt!==t.text){t.text=nt;t.manuallyEdited=true;saveLocal();render('selection');showSheet(hit)}else{document.getElementById('tdisp').style.display='block';document.getElementById('tedit').style.display='none'}});
+  document.getElementById('tedit-cancel')?.addEventListener('click',()=>{document.getElementById('tdisp').style.display='block';document.getElementById('tedit').style.display='none'});
+  document.getElementById('s-resolve')?.addEventListener('click',()=>{t.resolved=!t.resolved;saveLocal();render('resolve');showSheet(hit)});
+  document.getElementById('s-move')?.addEventListener('click',()=>showMoveModal(id));
+  document.getElementById('s-delete')?.addEventListener('click',()=>showConfirm(`"${t.text.slice(0,40)}" 를 삭제할까요?`,'삭제',()=>{const i=state.thoughts.findIndex(x=>x.id===id);if(i>=0)state.thoughts.splice(i,1);selected=null;hideSheet();saveLocal();validateRefs();render('delete')}))
+}
+function showMoveModal(tid){
+  const opts=state.subcategories.map(s=>{const cat=state.categories.find(c=>c.id===s.parentId);return`<option value="${s.id}">${esc(cat?.name||'')} › ${esc(s.name)}</option>`}).join('');
+  showModal(`<div class="sheet-section-label" style="margin-bottom:8px">이동할 세분류 선택</div><select class="modal-select" id="mv-sel">${opts}</select>`,[{text:'이동',cls:'primary',fn:()=>{const sv=document.getElementById('mv-sel')?.value;if(sv){const t=state.thoughts.find(x=>x.id===tid);if(t){t.subcategoryId=sv;saveLocal();render('move')}}}},{text:'취소',cls:'secondary',fn:null}])
+}
+
+// Modal
+function showConfirm(text,label,fn){showModal(text,[{text:label,cls:'danger',fn},{text:'취소',cls:'secondary',fn:null}])}
+function showModal(html,btns){
+  const ov=document.getElementById('modal-overlay'),tx=document.getElementById('modal-text'),be=document.getElementById('modal-buttons');
+  if(!ov||!tx||!be)return;
+  tx.innerHTML=html;
+  be.innerHTML=btns.map((b,i)=>`<button class="modal-btn ${b.cls}" data-i="${i}">${b.text}</button>`).join('');
+  ov.style.display='flex';
+  be.querySelectorAll('.modal-btn').forEach(btn=>{btn.addEventListener('click',()=>{ov.style.display='none';btns[parseInt(btn.dataset.i)]?.fn?.()})});
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.style.display='none'},{once:true})
+}
+
+// Toast
+let toastT=null;
+function showToast(msg,dur=3000){const e=document.getElementById('error-toast');if(!e)return;e.textContent=msg;e.style.display='block';clearTimeout(toastT);toastT=setTimeout(()=>e.style.display='none',dur)}
+
+// Loading
+function setLoading(on){const e=document.getElementById('loading-overlay');if(e)e.style.display=on?'flex':'none'}
+
+// Insights overlay
+function showInsightsOverlay(ins){
+  const ov=document.getElementById('insight-overlay');if(!ov)return;
+  ov.style.display='flex';
+  ov.innerHTML=ins.slice(0,3).map(i=>`<div class="insight-card"><div class="i-type">${INSIGHT_LABELS[i.type]||i.type}</div><div class="i-text">${esc(i.text)}</div></div>`).join('');
+  setTimeout(()=>ov.style.display='none',6000);
+  ov.querySelectorAll('.insight-card').forEach(c=>c.addEventListener('click',()=>c.remove()))
+}
+
+// Mirror
+function showMirror(text){
+  const ov=document.getElementById('mirror-overlay'),tx=document.getElementById('mirror-text');if(!ov||!tx)return;
+  tx.textContent=text;ov.style.display='flex';
+  const dur=Math.max(5000,Math.min(9000,text.length*60));
+  setTimeout(()=>ov.style.display='none',dur);
+  ov.addEventListener('click',()=>ov.style.display='none',{once:true})
+}
+
+// Insights Panel
+function showInsightsPanel(){
+  const p=document.getElementById('insights-panel'),l=document.getElementById('insights-list');if(!p||!l)return;
+  l.innerHTML=state.insights.length?state.insights.map(i=>`<div class="insight-full-card"><div class="insight-full-type">${INSIGHT_LABELS[i.type]||i.type}</div><div class="insight-full-text">${esc(i.text)}</div></div>`).join(''):'<div class="no-insights">아직 인사이트가 없어요<br>세션을 진행해보세요</div>';
+  p.style.display='block'
+}
+function hideInsightsPanel(){const p=document.getElementById('insights-panel');if(p)p.style.display='none'}
+
+// Nav Tabs
+function initNavTabs(){
+  document.querySelectorAll('.nav-btn[data-tab]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(btn.dataset.tab==='session')return;
+      document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      if(btn.dataset.tab==='map')hideInsightsPanel();
+      else if(btn.dataset.tab==='insights')showInsightsPanel();
+    })
+  })
+}
+
+// Menu
+function initMenu(){
+  const btn=document.getElementById('menu-btn'),dd=document.getElementById('menu-dropdown');
+  btn?.addEventListener('click',e=>{e.stopPropagation();dd.style.display=dd.style.display==='none'?'block':'none'});
+  document.addEventListener('click',()=>{if(dd)dd.style.display='none'});
+  // API Key modal
+  document.getElementById('menu-apikey')?.addEventListener('click',()=>{
+    const ov=document.getElementById('apikey-overlay'),inp=document.getElementById('apikey-input');
+    if(!ov)return;
+    const cur=getApiKey();inp.value=cur||'';
+    const st=document.getElementById('apikey-status');
+    st.textContent=cur?'✓ API 키가 저장되어 있어요':'아직 API 키가 없어요';
+    st.style.color=cur?'#34d399':'#909097';
+    ov.style.display='flex';setTimeout(()=>inp.focus(),100);
+  });
+  document.getElementById('apikey-save')?.addEventListener('click',()=>{
+    const inp=document.getElementById('apikey-input'),val=inp.value.trim();
+    const st=document.getElementById('apikey-status');
+    if(!val){localStorage.removeItem('md-api-key');st.textContent='키가 삭제됐어요';st.style.color='#909097';return}
+    if(!val.startsWith('sk-ant-')){st.textContent='❌ 올바른 Anthropic API 키가 아니에요 (sk-ant-로 시작해야 해요)';st.style.color='#f87171';return}
+    localStorage.setItem('md-api-key',val);st.textContent='✓ 저장됐어요!';st.style.color='#34d399';
+    setTimeout(()=>{document.getElementById('apikey-overlay').style.display='none';showToast('API 키 저장 완료 ✦')},800);
+  });
+  document.getElementById('apikey-cancel')?.addEventListener('click',()=>{document.getElementById('apikey-overlay').style.display='none'});
+  document.getElementById('apikey-overlay')?.addEventListener('click',e=>{if(e.target===document.getElementById('apikey-overlay'))document.getElementById('apikey-overlay').style.display='none'});
+  document.getElementById('apikey-input')?.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('apikey-save')?.click()});
+  document.getElementById('menu-export')?.addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`mind-dump-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href)});
+  document.getElementById('menu-import')?.addEventListener('click',()=>document.getElementById('import-file-input')?.click());
+  document.getElementById('import-file-input')?.addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{loadStateData(JSON.parse(ev.target.result));saveLocal();render('full');showToast('가져오기 완료!')}catch(e){showToast('파일을 읽을 수 없어요')}};r.readAsText(f);e.target.value=''});
+  document.getElementById('menu-reset')?.addEventListener('click',()=>showConfirm('모든 데이터를 초기화할까요?','초기화',()=>{localStorage.setItem('mind-dump-v4-backup',JSON.stringify(state));resetState();saveLocal();selected=null;hideSheet();render('reset');showToast('초기화되었어요')}));
+  document.getElementById('menu-signout')?.addEventListener('click',signOut);
+  document.getElementById('menu-reanalyze')?.addEventListener('click',()=>{if(!state.thoughts.length){showToast('생각이 없어요');return}showToast('세션을 열어 생각을 다시 입력해주세요')});
+}
+
+// ════════════════ SESSION ═════════════════════════════
+let timerInterval=null,timerSecs=0,timerMode=7,sessStarted=false,sessTyped=false;
+let hint1=null,hint2=null,hint3=null;
+
+function openSession(){
+  const ov=document.getElementById('session-overlay');if(!ov)return;
+  renderPendingCaptures();ov.style.display='flex';
+  sessStarted=false;sessTyped=false;
+  setTimerMode(timerMode);
+  const inp=document.getElementById('session-input');
+  if(inp){const pt=state.pendingCaptures.map(c=>c.text).join('\n');inp.value=pt?pt+'\n':'';setTimeout(()=>{inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length)},100)}
+  document.getElementById('session-hint').textContent=''
+}
+function closeSession(){
+  const ov=document.getElementById('session-overlay');if(ov)ov.style.display='none';
+  stopTimer();clearTimeout(hint1);clearTimeout(hint2);clearTimeout(hint3)
+}
+function setTimerMode(m){
+  timerMode=m;const el=document.getElementById('session-timer');
+  if(el)el.textContent=m===0?'∞':`${m}:00`;
+  const ring=document.getElementById('timer-ring');if(ring)ring.setAttribute('stroke-dashoffset','0');
+  document.querySelectorAll('.timer-mode-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.min)===m))
+}
+function startTimer(){
+  if(sessStarted)return;sessStarted=true;timerSecs=timerMode>0?timerMode*60:0;
+  if(timerMode>0){timerInterval=setInterval(()=>{timerSecs--;updateTimerDisplay();if(timerSecs<=0){stopTimer();endSession()}},1000)}
+  hint1=setTimeout(()=>{const e=document.getElementById('session-hint');if(e)e.textContent='아직 더 있지 않나요?'},40000);
+  hint2=setTimeout(()=>{const e=document.getElementById('session-hint');if(e)e.textContent='지금 몸에서 느껴지는 건요?'},180000);
+  hint3=setTimeout(()=>{const e=document.getElementById('session-hint');if(e)e.textContent='가장 쓰기 싫었던 것은요?'},300000);
+}
+function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null}}
+function updateTimerDisplay(){
+  const el=document.getElementById('session-timer');if(!el)return;
+  if(timerMode===0){el.textContent='∞';return}
+  const m=Math.floor(timerSecs/60),s=timerSecs%60;el.textContent=`${m}:${s.toString().padStart(2,'0')}`;
+  const ring=document.getElementById('timer-ring');
+  if(ring){const total=timerMode*60,off=125.66-(timerSecs/total)*125.66;ring.setAttribute('stroke-dashoffset',off.toFixed(2))}
+}
+async function endSession(){
+  const inp=document.getElementById('session-input');if(!inp)return;
+  const raw=inp.value.trim();if(!raw){closeSession();return}
+  const inputs=raw.split(/[\n,]/).map(s=>s.trim()).filter(s=>s.length>0);
+  if(!inputs.length){closeSession();return}
+  const apiKey=getApiKey();if(!apiKey&&!CONFIG.API_ENDPOINT){closeSession();showModal('API 키가 없어요.<br>오른쪽 상단 ⋮ 메뉴 → <b>🔑 API 키 설정</b>에서 입력해주세요.',[{text:'설정하기',cls:'primary',fn:()=>document.getElementById('menu-apikey')?.click()},{text:'취소',cls:'secondary',fn:null}]);return}
+  closeSession();setLoading(true);
+  try{
+    const token=await getAccessToken();
+    const diff=await analyzeSession(inputs,token);
+    const mirror=applyDiff(diff);
+    state.pendingCaptures=[];
+    saveSnapshot();
+    saveLocal();
+    if(token){try{await saveCloud()}catch(e){}}
+    setLoading(false);fitAll();render('analysis');
+    if(mirror)showMirror(mirror);
+    if(state.insights.length)showInsightsOverlay(state.insights.slice(0,3));
+  }catch(err){setLoading(false);console.error(err);showToast('오류: '+err.message)}
+}
+function initSession(){
+  document.querySelector('.session-nav-btn')?.addEventListener('click',openSession);
+  document.getElementById('session-cancel-btn')?.addEventListener('click',closeSession);
+  document.getElementById('session-done-btn')?.addEventListener('click',endSession);
+  document.querySelectorAll('.timer-mode-btn').forEach(b=>b.addEventListener('click',()=>{if(!sessStarted)setTimerMode(parseInt(b.dataset.min))}));
+  document.getElementById('session-input')?.addEventListener('input',()=>{if(!sessTyped){sessTyped=true;startTimer()}});
+  document.getElementById('quick-capture-btn')?.addEventListener('click',()=>{const p=document.getElementById('quick-capture-popup');if(p){const show=p.style.display!=='none';p.style.display=show?'none':'block';if(!show)document.getElementById('quick-capture-input')?.focus()}});
+  document.getElementById('quick-capture-save')?.addEventListener('click',()=>{const inp=document.getElementById('quick-capture-input');if(!inp||!inp.value.trim())return;state.pendingCaptures.push({id:`cap_${Date.now()}`,text:inp.value.trim(),capturedAt:Date.now()});inp.value='';document.getElementById('quick-capture-popup').style.display='none';saveLocal();showToast('메모가 저장됐어요 ✦')});
+}
+function renderPendingCaptures(){
+  const w=document.getElementById('pending-captures-wrap'),l=document.getElementById('pending-list');if(!w||!l)return;
+  if(!state.pendingCaptures.length){w.style.display='none';return}
+  w.style.display='block';l.innerHTML=state.pendingCaptures.map(c=>`<div class="pending-capture-item">· ${esc(c.text)}</div>`).join('')
+}
+
+// ════════════════ SNAPSHOT ════════════════════════════
+function saveSnapshot(){
+  const snap={ts:Date.now(),categories:JSON.parse(JSON.stringify(state.categories)),subcategories:JSON.parse(JSON.stringify(state.subcategories)),thoughts:JSON.parse(JSON.stringify(state.thoughts)),relationships:JSON.parse(JSON.stringify(state.relationships)),thoughtRelationships:JSON.parse(JSON.stringify(state.thoughtRelationships))};
+  state.snapshots.push(snap);if(state.snapshots.length>30)state.snapshots.shift();
+  updateSnapSlider();initSnapSlider()
+}
+function initSnapSlider(){
+  const bar=document.getElementById('snapshot-slider-bar'),sl=document.getElementById('snap-slider');if(!bar||!sl)return;
+  if(state.snapshots.length<2){bar.style.display='none';return}
+  bar.style.display='flex';sl.max=state.snapshots.length-1;sl.value=state.snapshots.length-1;snapLabel(state.snapshots.length-1)
+}
+function snapLabel(idx){const s=state.snapshots[idx],el=document.getElementById('snap-label');if(!el||!s)return;const d=new Date(s.ts),isT=d.toDateString()===new Date().toDateString();el.textContent=isT?d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('ko-KR',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}
+function initSnapEvents(){
+  document.getElementById('snap-slider')?.addEventListener('input',e=>{
+    const idx=parseInt(e.target.value),snap=state.snapshots[idx];snapLabel(idx);if(!snap)return;
+    if(idx===state.snapshots.length-1){render('full');return}
+    const oc=state.categories,os=state.subcategories,ot=state.thoughts,or=state.relationships,otr=state.thoughtRelationships;
+    state.categories=snap.categories||[];state.subcategories=snap.subcategories||[];state.thoughts=snap.thoughts||[];state.relationships=snap.relationships||[];state.thoughtRelationships=snap.thoughtRelationships||[];
+    render('snapshot');state.categories=oc;state.subcategories=os;state.thoughts=ot;state.relationships=or;state.thoughtRelationships=otr;
+  });
+  document.getElementById('snap-current-btn')?.addEventListener('click',()=>{const sl=document.getElementById('snap-slider');if(sl){sl.value=state.snapshots.length-1;snapLabel(state.snapshots.length-1)}render('full')});
+}
+
+// ════════════════ AI ══════════════════════════════════
+const SYSTEM_PROMPT=`당신은 사용자의 생각을 분류하고 감정을 분석하는 AI입니다.
+반드시 순수 JSON만 반환하세요. 마크다운이나 설명 텍스트를 절대 포함하지 마세요.
+
+핵심 원칙:
+1. 기존 항목의 ID는 절대 변경하지 마세요.
+2. 새 항목은 _ref로 임시 참조를 만드세요 (_c1, _s1, _t1 등).
+3. _protected: true인 생각은 emotion/weight/urgency를 재평가하지 마세요.
+4. 모든 새 입력이 반드시 어딘가에 포함되어야 합니다.
+5. mirror_reflection 필드: 3~4문장, 판단 없음, 패턴/변화/긴장/모순/반복 설명.
+
+감정: anxiety(불안) frustration(짜증) anticipation(기대) conflict(갈등) relief(안도) pride(뿌듯) sadness(서글픔) neutral(중립)
+weight: 0.1~0.2단순메모 0.3~0.5일반고민 0.6~0.7중요걱정 0.8~1.0깊은근심
+urgency: 0.1장기 0.5이번주 0.9오늘당장
+
+세분류: 최대한 세분화. 세분류당 생각 1~3개 이상이면 쪼갤것. 대분류당 최소 3개 이상.
+새카테고리: {"_ref":"_c1","name":"명","description":"설명"}
+새세분류: {"_ref":"_s1","parentRef":"_c1","name":"명"}  ※parentRef: 기존이면 실제id
+새생각: {"_ref":"_t1","subcategoryRef":"_s1","text":"내용","emotion":"anxiety","weight":0.5,"urgency":0.3}
+생각관계: {"from":"_t1","to":"_t2","type":"causes","label":"설명"}  type: causes|conflicts|amplifies|resolves|connects
+대분류관계: {"fromRef":"_c1","toRef":"_c2","type":"causes","label":"설명","strength":0.7}  type: causes|conflicts|resolves|amplifies|blocks|connects
+
+JSON: {"categoryUpdates":{"add":[],"rename":[],"setRoot":null},"subcategoryUpdates":{"add":[]},"thoughtUpdates":{"add":[],"merge":[],"reassess":[],"move":[]},"relationships":[],"thoughtRelationships":[],"insights":[],"contradictions":[],"recurring_patterns":[],"mirror_reflection":""}`;
+
+function parseJSON(text){try{return JSON.parse(text)}catch(e){}const m=text.match(/\{[\s\S]*\}/);if(m)try{return JSON.parse(m[0])}catch(e2){}return null}
+
+async function analyzeSession(inputs,token){
+  const req={version:2,existingState:{categories:state.categories.map(c=>({id:c.id,name:c.name,description:c.description,isRoot:c.isRoot})),subcategories:state.subcategories.map(s=>({id:s.id,name:s.name,parentId:s.parentId})),thoughts:state.thoughts.map(t=>({id:t.id,text:t.text,subcategoryId:t.subcategoryId,emotion:t.manuallyEdited?t.emotion:undefined,weight:t.manuallyEdited?t.weight:undefined,urgency:t.manuallyEdited?t.urgency:undefined,_protected:t.manuallyEdited})),rootCategoryId:state.categories.find(c=>c.isRoot)?.id||null},newInputs:inputs,snapshotHistory:(state.snapshots||[]).slice(-4,-1).map(s=>s.thoughts.map(t=>t.text))};
+  const body={model:'claude-sonnet-4-6',max_tokens:8000,system:SYSTEM_PROMPT,messages:[{role:'user',content:'Please analyze and organize these thoughts:\n'+JSON.stringify(req,null,2)}]};
+  const apiKey=getApiKey();
+  let resp;
+  if(apiKey&&!CONFIG.API_ENDPOINT){
+    // 로컬 직접 호출 (API 키 있을 때)
+    resp=await fetch(ANTHROPIC_DIRECT,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(body)});
+  }else{
+    // Cloudflare Worker 경유
+    const hdrs={'Content-Type':'application/json'};if(token)hdrs['Authorization']=`Bearer ${token}`;
+    resp=await fetch(CONFIG.API_ENDPOINT,{method:'POST',headers:hdrs,body:JSON.stringify(body)});
+  }
+  if(!resp.ok){const et=await resp.text().catch(()=>'');throw new Error(`API ${resp.status}: ${et.slice(0,100)}`)}
+  const data=await resp.json();const raw=data?.content?.[0]?.text||'';const diff=parseJSON(raw);
+  if(!diff)throw new Error('AI 응답 파싱 실패');return diff
+}
+
+function applyDiff(diff){
+  const refMap={},now=Date.now();
+  (diff.categoryUpdates?.add||[]).forEach(c=>{const id=genId('cat');refMap[c._ref]=id;state.categories.push({id,name:c.name,description:c.description||'',colorIndex:state.categories.length,isRoot:false,createdAt:now})});
+  (diff.categoryUpdates?.rename||[]).forEach(r=>{const c=state.categories.find(x=>x.id===r.id);if(c){if(r.name)c.name=r.name;if(r.description)c.description=r.description}});
+  if(diff.categoryUpdates?.setRoot){const rid=refMap[diff.categoryUpdates.setRoot]||diff.categoryUpdates.setRoot;state.categories.forEach(c=>c.isRoot=c.id===rid)}else if(diff.categoryUpdates?.setRoot===null)state.categories.forEach(c=>c.isRoot=false);
+  (diff.subcategoryUpdates?.add||[]).forEach(s=>{const id=genId('sub');refMap[s._ref]=id;const pid=refMap[s.parentRef]||s.parentRef;state.subcategories.push({id,name:s.name,parentId:pid,createdAt:now})});
+  (diff.thoughtUpdates?.add||[]).forEach(t=>{const id=genId('thought');refMap[t._ref]=id;const sid=refMap[t.subcategoryRef]||t.subcategoryRef;state.thoughts.push({id,text:t.text,originalTexts:[t.text],subcategoryId:sid,emotion:t.emotion||'neutral',weight:t.weight??0.5,urgency:t.urgency??0.5,occurrences:1,firstSeen:now,lastSeen:now,resolved:false,manuallyEdited:false})});
+  (diff.thoughtUpdates?.merge||[]).forEach(m=>{const t=state.thoughts.find(x=>x.id===m.targetId);if(!t)return;t.occurrences=(t.occurrences||1)+1;t.lastSeen=now;if(m.absorbedInputs)t.originalTexts=[...(t.originalTexts||[t.text]),...m.absorbedInputs]});
+  (diff.thoughtUpdates?.reassess||[]).forEach(r=>{const t=state.thoughts.find(x=>x.id===r.id);if(!t||t.manuallyEdited)return;if(r.emotion)t.emotion=r.emotion;if(r.weight!==undefined)t.weight=r.weight;if(r.urgency!==undefined)t.urgency=r.urgency});
+  (diff.thoughtUpdates?.move||[]).forEach(m=>{const t=state.thoughts.find(x=>x.id===m.thoughtId);if(!t)return;const ns=refMap[m.newSubcategoryRef]||m.newSubcategoryRef;if(ns)t.subcategoryId=ns});
+  state.relationships=(diff.relationships||[]).map(r=>({from:refMap[r.fromRef]||r.fromRef||r.from,to:refMap[r.toRef]||r.toRef||r.to,type:r.type||'connects',label:r.label||'',strength:r.strength??0.6})).filter(r=>r.from&&r.to);
+  const ntr=(diff.thoughtRelationships||[]).map(r=>({from:refMap[r.from]||r.from,to:refMap[r.to]||r.to,type:r.type||'connects',label:r.label||''})).filter(r=>r.from&&r.to);
+  const ek=new Set(state.thoughtRelationships.map(r=>`${r.from}|${r.to}`));ntr.forEach(r=>{const k=`${r.from}|${r.to}`;if(!ek.has(k)){state.thoughtRelationships.push(r);ek.add(k)}});
+  state.insights=(diff.insights||[]).map(i=>({type:i.type||'pattern',text:i.text,relatedIds:(i.relatedRefs||[]).map(r=>refMap[r]||r),createdAt:now}));
+  (diff.contradictions||[]).forEach(c=>state.insights.push({type:'conflict',text:`${c.a} ↔ ${c.b}: ${c.note}`,relatedIds:[],createdAt:now}));
+  (diff.recurring_patterns||[]).forEach(p=>state.insights.push({type:'recurring',text:`${p.theme}: ${p.note}`,relatedIds:[],createdAt:now}));
+  validateRefs();state.lastAnalyzed=now;
+  return diff.mirror_reflection||null
+}
+
+function validateRefs(){
+  const cids=new Set(state.categories.map(c=>c.id));
+  state.subcategories=state.subcategories.filter(s=>cids.has(s.parentId));
+  const sids=new Set(state.subcategories.map(s=>s.id));
+  state.thoughts.forEach(t=>{if(!sids.has(t.subcategoryId)){const f=state.subcategories[0];if(f)t.subcategoryId=f.id}});
+  const tids=new Set(state.thoughts.map(t=>t.id));
+  state.relationships=state.relationships.filter(r=>cids.has(r.from)&&cids.has(r.to));
+  state.thoughtRelationships=state.thoughtRelationships.filter(r=>tids.has(r.from)&&tids.has(r.to))
+}
+
+// ════════════════ AUTH (Supabase) ═════════════════════
+let supabase=null,currentUser=null;
+
+async function initSupabase(){
+  if(!CONFIG.SUPABASE_URL||!CONFIG.SUPABASE_ANON){console.log('Guest mode');return false}
+  // Load Supabase from CDN
+  if(!window.supabase){
+    await new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';s.onload=res;s.onerror=rej;document.head.appendChild(s)});
+  }
+  supabase=window.supabase.createClient(CONFIG.SUPABASE_URL,CONFIG.SUPABASE_ANON);
+  supabase.auth.onAuthStateChange(async(ev,sess)=>{
+    if(ev==='SIGNED_IN'){currentUser=sess.user;const ok=await loadCloud();if(!ok)loadLocal()}
+    else if(ev==='SIGNED_OUT'){currentUser=null}
+  });
+  const {data:{session}}=await supabase.auth.getSession();
+  if(session){currentUser=session.user;return session.user}
+  return null
+}
+async function signIn(email,password){if(!supabase)throw new Error('Supabase not init');const{data,error}=await supabase.auth.signInWithPassword({email,password});if(error)throw error;return data.user}
+async function signUp(email,password){if(!supabase)throw new Error('Supabase not init');const{data,error}=await supabase.auth.signUp({email,password});if(error)throw error;return data.user}
+async function signOut(){if(supabase)await supabase.auth.signOut();currentUser=null;resetState();document.getElementById('auth-screen').style.display='flex';document.getElementById('app').style.display='none';initAuthUI(()=>{document.getElementById('auth-screen').style.display='none';showApp()})}
+async function getAccessToken(){if(!supabase)return null;const{data:{session}}=await supabase.auth.getSession();return session?.access_token||null}
+async function saveCloud(){if(!supabase||!currentUser)return;await supabase.from('mind_states').upsert({user_id:currentUser.id,state:state,updated_at:new Date().toISOString()},{onConflict:'user_id'})}
+async function loadCloud(){if(!supabase||!currentUser)return false;try{const{data}=await supabase.from('mind_states').select('state').eq('user_id',currentUser.id).single();if(data?.state){loadStateData(data.state);return true}}catch(e){}return false}
+
+function initAuthUI(onSuccess){
+  let tab='signin';
+  document.querySelectorAll('.auth-tab').forEach(t=>t.addEventListener('click',()=>{tab=t.dataset.tab;document.querySelectorAll('.auth-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');const sb=document.getElementById('auth-submit');if(sb)sb.textContent=tab==='signin'?'로그인':'회원가입';document.getElementById('auth-error').textContent=''}));
+  const form=document.getElementById('auth-form');
+  form?.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const email=document.getElementById('auth-email')?.value.trim(),pw=document.getElementById('auth-password')?.value;
+    const errEl=document.getElementById('auth-error'),sb=document.getElementById('auth-submit');
+    if(!email||!pw)return;sb.textContent='처리 중...';sb.disabled=true;errEl.textContent='';
+    try{
+      if(tab==='signin'){await signIn(email,pw);const ok=await loadCloud();if(!ok)loadLocal();onSuccess()}
+      else{await signUp(email,pw);errEl.textContent='이메일을 확인해주세요!';sb.textContent='회원가입';sb.disabled=false}
+    }catch(err){errEl.textContent=err.message.includes('Invalid login')?'이메일/비밀번호가 틀렸어요':err.message||'오류가 발생했어요';sb.textContent=tab==='signin'?'로그인':'회원가입';sb.disabled=false}
+  });
+  // Remove old listener to avoid duplicates
+  const guest=document.getElementById('auth-guest');if(guest){const ng=guest.cloneNode(true);guest.parentNode.replaceChild(ng,guest);ng.addEventListener('click',()=>{loadLocal();onSuccess()})}
+}
+
+// ════════════════ BOOT ════════════════════════════════
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+async function boot(){
+  renderStars();
+  const user=await initSupabase().catch(()=>null);
+  if(user){const ok=await loadCloud();if(!ok)loadLocal();showApp()}
+  else{const hasLocal=loadLocal();if(hasLocal&&(state.categories.length>0||state.thoughts.length>0)&&!CONFIG.SUPABASE_URL)showApp();else{initAuthUI(()=>{document.getElementById('auth-screen').style.display='none';showApp()})}}
+}
+
+function showApp(){
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  updateDims();initEvents();initSheet();initSession();initSnapEvents();initNavTabs();initMenu();
+  render('init');
+  if(state.categories.length>0)setTimeout(()=>{fitAll();render('fit')},100);
+  initSnapSlider();
+  // auto-save every 10s
+  setInterval(()=>{if(state.lastAnalyzed>0){saveLocal();if(currentUser)saveCloud().catch(()=>{})}},10000);
+}
+
+boot().catch(err=>{console.error(err);loadLocal();showApp()});
+</script>
+</body>
+</html>
